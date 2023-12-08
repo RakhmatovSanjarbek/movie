@@ -1,38 +1,35 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:movie/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 
-class FavoritePage extends StatefulWidget {
-  const FavoritePage({Key? key}) : super(key: key);
+import '../../data/movie_model.dart';
 
-  @override
-  State<FavoritePage> createState() => _FavoritePageState();
-}
+class SavedPage extends StatelessWidget {
+  const SavedPage({super.key});
 
-class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
-    final boolProvider = context.watch<AppProvider>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Saqlanganlar",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+        title: Text("saqlanganlar-oynasi".tr(),style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
         backgroundColor: const Color(0xff0509d3),
-        actions: const [
-          Icon(Icons.search,color: Colors.white,size: 24.0,),
-          SizedBox(width: 16.0,)
-        ],
       ),
-      body: boolProvider.isSaveUzbek == false
-          ? Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(16.0),
-              child: Lottie.asset('assets/empty.json'),
-            )
-          : ListView.builder(
-              itemCount: 10,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
+      body: Consumer<AppProvider>(
+        builder: (context, savedMoviesProvider, _) {
+          List<MovieModel> savedMovies = savedMoviesProvider.savedMovies.toList();
+          return savedMovies.length==0?Center(
+            child: Lottie.asset('assets/empty.json')
+          ):ListView.builder(
+            itemCount: savedMovies.length,
+            itemBuilder: (context, index) {
+              MovieModel movie = savedMovies[index];
+              return GestureDetector(
+                onTap: () {
+                  // widget.onTap.call();
+                },
+                child: Container(
                   margin: const EdgeInsets.all(16.0),
                   width: double.infinity,
                   height: 120.0,
@@ -43,7 +40,7 @@ class _FavoritePageState extends State<FavoritePage> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16.0),
                         child: Image.network(
-                          "https://i.ytimg.com/vi/YVzms2PDeoM/maxresdefault.jpg",
+                          movie.imagUrl ?? "",
                           width: 160.0,
                           height: 120.0,
                           fit: BoxFit.cover,
@@ -52,52 +49,53 @@ class _FavoritePageState extends State<FavoritePage> {
                       const SizedBox(
                         width: 8.0,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          SizedBox(
-                            height: 4.0,
-                          ),
-                          Text(
-                            "Shoqol",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 4.0,
                             ),
-                          ),
-                          SizedBox(
-                            height: 8.0,
-                          ),
-                          Text(
-                            "Shoqol (o'zbek film)",
-                            style: TextStyle(
+                            Text(
+                              movie.movieName ?? "",
+                              style: const TextStyle(
                                 fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            Text(
+                              movie.movieDescretion ?? "",
+                              style: const TextStyle(
+                                fontSize: 14.0,
                                 color: Color(0xffb0b0b0),
-                                fontWeight: FontWeight.w500),
-                            maxLines: 2,
-                          ),
-                        ],
+                                fontWeight: FontWeight.w500,
+                              ),
+                              maxLines: 2,
+                            ),
+                          ],
+                        ),
                       ),
                       IconButton(
                         onPressed: () {
-                          isSaveUzbek();
+                          Provider.of<AppProvider>(context, listen: false).removeFromSavedList(movie);
                         },
-                        icon: boolProvider.isSaveUzbek == false
-                            ? const Icon(Icons.favorite_border)
-                            : const Icon(
-                                Icons.favorite,
-                                color: Color(0xffea0707),
-                              ),
+                        icon: const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
                       ),
+                      )
                     ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
-  }
-
-  void isSaveUzbek() {
-    context.read<AppProvider>().isSaveUzbekBool(context);
   }
 }

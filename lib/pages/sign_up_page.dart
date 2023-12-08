@@ -4,9 +4,14 @@ import 'package:movie/pages/main_pages/home_page.dart';
 import 'package:movie/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 
-class SignUpPage extends StatelessWidget {
-  SignUpPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nekNameController = TextEditingController();
@@ -154,17 +159,18 @@ class SignUpPage extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           controller: _sexController,
                           decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  gapPadding: 5.0),
-                              hintText: "Jinsi(Erkak yoki Ayol)"),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                              gapPadding: 5.0,
+                            ),
+                            hintText: "Jinsi (Erkak yoki Ayol)",
+                          ),
                           validator: (String? value) {
                             if (value!.isEmpty) {
                               return 'Iltimos, jinsingizni kiriting.';
+                            } else if (value != 'Erkak' && value != 'Ayol') {
+                              return 'Erkak yoki Ayol ko\'rinishida kiriting.';
                             }
-                            // if(value!="Erkak"||value!="Ayol"){
-                            //   return '"Erkak" yoki "Ayol" ko\'rinishida kiriting';
-                            // }
                             return null;
                           },
                         ),
@@ -188,6 +194,7 @@ class SignUpPage extends StatelessWidget {
                       })),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          context.read<AppProvider>().setISLogin(true);
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(

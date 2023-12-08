@@ -9,27 +9,27 @@ import 'package:provider/provider.dart';
 
 import '../../widgets/costm_all_movie_page.dart';
 
-class AllUzbekMovies extends StatefulWidget {
-  const AllUzbekMovies({Key? key}) : super(key: key);
+class AllIndeaMovies extends StatefulWidget {
+  const AllIndeaMovies({super.key});
 
   @override
-  State<AllUzbekMovies> createState() => _AllUzbekMoviesState();
+  State<AllIndeaMovies> createState() => _AllIndeaMoviesState();
 }
 
-class _AllUzbekMoviesState extends State<AllUzbekMovies> {
-  List<MovieModel> uzbekMovieList = [];
+class _AllIndeaMoviesState extends State<AllIndeaMovies> {
+  List<MovieModel> ideaMovieList = [];
   LoadingStatus loadingStatus = LoadingStatus.initial;
 
   @override
   Widget build(BuildContext context) {
-    uzbekMovieList = context.watch<AppProvider>().uzbekMovieList;
+    ideaMovieList = context.watch<AppProvider>().indeaMovieList;
     loadingStatus = context.watch<AppProvider>().loadingStatus;
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color(0xff0509d3),
         title: const Text(
-          "Barcha tarjima kinolar",
+          "Barcha hind kinolar",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -43,15 +43,15 @@ class _AllUzbekMoviesState extends State<AllUzbekMovies> {
           : LiquidPullToRefresh(
               backgroundColor: const Color(0xff0509d3),
               onRefresh: () {
-                return context.read<AppProvider>().getUzbekAllMovies();
+                return context.read<AppProvider>().getIndeaMovive();
               },
               child: ListView.builder(
-                  itemCount: uzbekMovieList.length,
+                  itemCount: ideaMovieList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return CostmMovies(
-                      movieModel: uzbekMovieList[index],
+                      movieModel: ideaMovieList[index],
                       onTap: () {
-                        showTouTubePage(uzbekMovieList[index]);
+                        showTouTubePage(ideaMovieList[index]);
                       },
                     );
                   }),
@@ -61,11 +61,7 @@ class _AllUzbekMoviesState extends State<AllUzbekMovies> {
         onPressed: () {
           Navigator.pop(context);
         },
-        child: const Icon(
-          CupertinoIcons.house_fill,
-          color: Colors.white,
-          size: 24.0,
-        ),
+        child: const Icon(CupertinoIcons.house_fill,color: Colors.white,size: 24.0,),
       ),
     );
   }

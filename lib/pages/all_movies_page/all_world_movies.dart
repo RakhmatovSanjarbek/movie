@@ -9,27 +9,27 @@ import 'package:provider/provider.dart';
 
 import '../../widgets/costm_all_movie_page.dart';
 
-class AllUzbekMovies extends StatefulWidget {
-  const AllUzbekMovies({Key? key}) : super(key: key);
+class AllWorldMovies extends StatefulWidget {
+  const AllWorldMovies({super.key});
 
   @override
-  State<AllUzbekMovies> createState() => _AllUzbekMoviesState();
+  State<AllWorldMovies> createState() => _AllWorldMoviesState();
 }
 
-class _AllUzbekMoviesState extends State<AllUzbekMovies> {
-  List<MovieModel> uzbekMovieList = [];
+class _AllWorldMoviesState extends State<AllWorldMovies> {
+  List<MovieModel> worldMovieList = [];
   LoadingStatus loadingStatus = LoadingStatus.initial;
 
   @override
   Widget build(BuildContext context) {
-    uzbekMovieList = context.watch<AppProvider>().uzbekMovieList;
+    worldMovieList = context.watch<AppProvider>().worldMovieList;
     loadingStatus = context.watch<AppProvider>().loadingStatus;
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color(0xff0509d3),
         title: const Text(
-          "Barcha tarjima kinolar",
+          "Barcha jahon kinolar",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -38,34 +38,30 @@ class _AllUzbekMoviesState extends State<AllUzbekMovies> {
       ),
       body: loadingStatus == LoadingStatus.loading
           ? Center(
-              child: Lottie.asset("assets/loading.json"),
-            )
+        child: Lottie.asset("assets/loading.json"),
+      )
           : LiquidPullToRefresh(
-              backgroundColor: const Color(0xff0509d3),
-              onRefresh: () {
-                return context.read<AppProvider>().getUzbekAllMovies();
-              },
-              child: ListView.builder(
-                  itemCount: uzbekMovieList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CostmMovies(
-                      movieModel: uzbekMovieList[index],
-                      onTap: () {
-                        showTouTubePage(uzbekMovieList[index]);
-                      },
-                    );
-                  }),
-            ),
+        backgroundColor: const Color(0xff0509d3),
+        onRefresh: () {
+          return context.read<AppProvider>().getWorldMovies();
+        },
+        child: ListView.builder(
+            itemCount: worldMovieList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return CostmMovies(
+                movieModel: worldMovieList[index],
+                onTap: () {
+                  showTouTubePage(worldMovieList[index]);
+                },
+              );
+            }),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff0509d3),
         onPressed: () {
           Navigator.pop(context);
         },
-        child: const Icon(
-          CupertinoIcons.house_fill,
-          color: Colors.white,
-          size: 24.0,
-        ),
+        child: const Icon(CupertinoIcons.house_fill,color: Colors.white,size: 24.0,),
       ),
     );
   }
@@ -83,3 +79,4 @@ class _AllUzbekMoviesState extends State<AllUzbekMovies> {
     );
   }
 }
+

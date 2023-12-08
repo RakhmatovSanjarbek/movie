@@ -5,6 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:movie/pages/main_pages/favorite_page.dart';
 import 'package:movie/pages/main_pages/movie_page.dart';
 import 'package:movie/pages/main_pages/profile_page.dart';
+import 'package:movie/provider/app_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../../data/movie_model.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -14,11 +18,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<MovieModel> movieList = [];
   /// Controller to handle PageView and also handles initial page
-  final _pageController = PageController(initialPage: 0);
+  final _pageController = PageController(initialPage: 1);
 
   /// Controller to handle bottom nav bar and also handles initial page
-  final _controller = NotchBottomBarController(index: 0);
+  final _controller = NotchBottomBarController(index: 1);
 
   int maxCount = 3;
 
@@ -30,15 +35,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   /// widget list
   final List<Widget> bottomBarPages = [
-    const FavoritePage(),
+    SavedPage(),
     MoviePage(),
     ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final themBool = context.watch<AppProvider>();
     return Scaffold(
       body: PageView(
+
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: List.generate(
@@ -49,9 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ? AnimatedNotchBottomBar(
         /// Provide NotchBottomBarController
         notchBottomBarController: _controller,
-        color: Colors.white,
         showLabel: false,
         notchColor: Colors.blueGrey,
+
 
 
         /// restart app if you change removeMargins

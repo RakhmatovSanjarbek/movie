@@ -9,20 +9,20 @@ import 'package:provider/provider.dart';
 
 import '../../widgets/costm_all_movie_page.dart';
 
-class AllUzbekMovies extends StatefulWidget {
-  const AllUzbekMovies({Key? key}) : super(key: key);
+class AllTranslationMovie extends StatefulWidget {
+  const AllTranslationMovie({super.key});
 
   @override
-  State<AllUzbekMovies> createState() => _AllUzbekMoviesState();
+  State<AllTranslationMovie> createState() => _AllTranslationMovieState();
 }
 
-class _AllUzbekMoviesState extends State<AllUzbekMovies> {
-  List<MovieModel> uzbekMovieList = [];
+class _AllTranslationMovieState extends State<AllTranslationMovie> {
+  List<MovieModel> translationMovieList = [];
   LoadingStatus loadingStatus = LoadingStatus.initial;
 
   @override
   Widget build(BuildContext context) {
-    uzbekMovieList = context.watch<AppProvider>().uzbekMovieList;
+    translationMovieList = context.watch<AppProvider>().translationMovieList;
     loadingStatus = context.watch<AppProvider>().loadingStatus;
     return Scaffold(
       appBar: AppBar(
@@ -38,34 +38,30 @@ class _AllUzbekMoviesState extends State<AllUzbekMovies> {
       ),
       body: loadingStatus == LoadingStatus.loading
           ? Center(
-              child: Lottie.asset("assets/loading.json"),
-            )
+        child: Lottie.asset("assets/loading.json"),
+      )
           : LiquidPullToRefresh(
-              backgroundColor: const Color(0xff0509d3),
-              onRefresh: () {
-                return context.read<AppProvider>().getUzbekAllMovies();
-              },
-              child: ListView.builder(
-                  itemCount: uzbekMovieList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CostmMovies(
-                      movieModel: uzbekMovieList[index],
-                      onTap: () {
-                        showTouTubePage(uzbekMovieList[index]);
-                      },
-                    );
-                  }),
-            ),
+        backgroundColor: const Color(0xff0509d3),
+        onRefresh: () {
+          return context.read<AppProvider>().getTranslationMovive();
+        },
+        child: ListView.builder(
+            itemCount: translationMovieList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return CostmMovies(
+                movieModel: translationMovieList[index],
+                onTap: () {
+                  showTouTubePage(translationMovieList[index]);
+                },
+              );
+            }),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff0509d3),
         onPressed: () {
           Navigator.pop(context);
         },
-        child: const Icon(
-          CupertinoIcons.house_fill,
-          color: Colors.white,
-          size: 24.0,
-        ),
+        child: const Icon(CupertinoIcons.house_fill,color: Colors.white,size: 24.0,),
       ),
     );
   }
